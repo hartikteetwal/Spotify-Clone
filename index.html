@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotify – Web Player</title>
+    <link
+      rel="icon"
+      sizes="32x32"
+      type="image/png"
+      href="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      .border {
+        border: 2px solid red;
+        margin: 3px;
+      }
+      .flex {
+        display: flex;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .align-center {
+        align-content: center;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .bg-black {
+        background-color: black;
+        color: white;
+      }
+
+      .invert {
+        filter: invert(1);
+      }
+
+      .play-bg {
+        background-color: #00da6b;
+      }
+      .bg-grey {
+        background-color: #121212;
+      }
+
+      .rounded {
+        border-radius: 7px;
+      }
+
+      .m-1 {
+        margin: 5px;
+      }
+      .p-1 {
+        padding: 20px;
+      }
+
+      .text-decoration {
+        text-decoration: none;
+      }
+
+      .link-color {
+        color: #888686;
+      }
+      .link-bold {
+        font-weight: 600;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .disk1 img {
+        animation: rotate 1s infinite linear;
+      }
+
+      /* For Firefox */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: #555 #333;
+      }
+
+      /* For WebKit based browsers */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #555;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: #333;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #777;
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      :root {
+        --a: 0;
+        --top: 176px;
+      }
+
+      body {
+        background-color: black;
+        color: white;
+      }
+      .left {
+        width: 25vw;
+        padding: 10px;
+      }
+
+      .closeLogo {
+        display: flex;
+        justify-content: space-between;
+      }
+      .closeLogo .bx-x {
+        font-size: xx-large;
+      }
+
+      .home ul li {
+        list-style: none;
+        padding-top: 14px;
+        display: flex;
+        gap: 15px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .home ul li i {
+        position: relative;
+        top: 4px;
+      }
+      .library .heading ul li {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+        position: relative;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .library .heading ul li i {
+        position: relative;
+        top: 3px;
+      }
+
+      .library {
+        min-height: 75vh;
+        position: relative;
+      }
+
+      .library .songList {
+        max-height: 57vh;
+        overflow: auto;
+        min-width: 22vw;
+      }
+
+      .songList ul li p {
+        accent-color: red;
+      }
+      .library .songList ul li {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+        list-style-type: decimal;
+        list-style-position: inside;
+        display: flex;
+        gap: 14px;
+        cursor: pointer;
+        padding: 12px 0;
+        background-color: #181818;
+        margin: 12px 0;
+        padding: 8px;
+        border-radius: 4px;
+      }
+
+      /* .library .songList ul{
+    position: absolute;
+    overflow: auto;
+    height: 50vh;
+    width: 22vw;
+} */
+
+      .library .songList ul li i {
+        position: relative;
+        font-size: 35px;
+        top: 2px;
+        width: 1.7vw;
+      }
+
+      .bx-x {
+        display: none;
+      }
+      .songList .info {
+        position: absolute;
+        left: 50px;
+        width: 15vw;
+        font-size: 15px;
+      }
+
+      .songList .info p {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 300px;
+        width: 600px;
+      }
+
+      .playNow {
+        display: flex;
+        position: absolute;
+        right: 15px;
+        margin-left: 2px;
+      }
+
+      .footer {
+        gap: 15px;
+        font-size: 15px;
+        display: flex;
+        position: absolute;
+        bottom: 30px;
+        flex-wrap: wrap;
+      }
+      .footer a {
+        color: grey;
+        text-decoration: none;
+      }
+      .right {
+        width: 75vw;
+        margin: 16px 16px 16px 0px;
+        position: relative;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        background-color: #090909;
+        border-radius: 5px 5px 0px 0px;
+        height: 60px;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 3;
+      }
+
+      .header .rightLogo {
+        display: none;
+        margin-left: 10px;
+      }
+
+      .header .nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header .nav > i {
+        font-size: xx-large;
+      }
+
+      .header > * {
+        padding: 20px;
+        font-size: 20px;
+      }
+
+      .header .buttons .signup {
+        text-decoration: none;
+        margin: 0px 25px;
+        border-left: 4px solid #fff;
+        padding-left: 25px;
+      }
+
+      .header .buttons .premium,
+      .header .buttons .support {
+        margin-right: 10px;
+      }
+
+      .header .buttons .login {
+        border-radius: 30px;
+        width: 115px;
+        background-color: #fff;
+        outline: none;
+        border: none;
+        height: 50px;
+        font-size: 16px;
+        padding: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        position: relative;
+        top: -3px;
+      }
+
+      .bx-menu {
+        display: none;
+        font-size: 32px;
+        cursor: pointer;
+      }
+
+      .spotifyPlaylist {
+        padding: 0px;
+      }
+
+      .spotifyPlaylist h1 {
+        margin: 16px 0px 0px 20px;
+      }
+
+      .header .buttons a:hover {
+        color: #fff;
+        font-size: 1.3rem;
+      }
+
+      .header .buttons button:hover {
+        transform: scale(1.03);
+        background-color: #ebebeb;
+      }
+
+      .spotifyPlaylist .card {
+        width: 190px;
+        padding: 0px 15px 10px 15px;
+        border-radius: 8px;
+        background-color: #181818;
+        position: relative;
+        margin: 2px;
+        transition: all 0.3s;
+      }
+
+      .cardContainer {
+        display: flex;
+        row-gap: 50px;
+        flex-wrap: wrap;
+        margin: 30px;
+        max-height: 60vh;
+        overflow: auto;
+        justify-content: space-evenly;
+        transition: all 0.5s;
+      }
+
+      .playbar:hover,
+      .library .songList ul li:hover,
+      .spotifyPlaylist .card:hover {
+        transition: background-color 0.3s ease;
+        background-color: #282828;
+      }
+
+      .card > * {
+        padding-top: 10px;
+      }
+      .card img {
+        width: 100%;
+        object-fit: contain;
+      }
+
+      .card p {
+        color: #888686;
+      }
+
+      .card h2 {
+        font-size: 20px;
+      }
+
+      .play i {
+        background-color: #00da6b;
+        width: 55px;
+        height: 55px;
+        font-size: 40px;
+        outline: none;
+        border: none;
+        border-radius: 50%;
+        position: absolute;
+        right: 26px;
+        top: var(--top);
+        opacity: var(--a);
+        transition: all 0.3s;
+        box-shadow: 0px 3px 7px #555757;
+      }
+      .play i::before {
+        color: black;
+        font-size: 50px;
+        position: relative;
+        left: 2px;
+        top: 1px;
+      }
+
+      .card:hover {
+        cursor: pointer;
+        --a: 1;
+        --top: 147px;
+      }
+
+      .playbar {
+        position: fixed;
+        bottom: 25px;
+        background-color: #181818;
+        width: calc(100vh-60px);
+        padding: 10px 0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+      }
+      .songButtons {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        font-size: xx-large;
+      }
+
+      .seekbar {
+        height: 5px;
+        background-color: #fff;
+        position: absolute;
+        border-radius: 20px;
+        margin-top: 5px;
+        cursor: pointer;
+        top: 45px;
+        width: 98%;
+      }
+
+      .seekbar .circle {
+        height: 13px;
+        width: 13px;
+        border-radius: 50%;
+        background-color: white;
+        position: relative;
+        bottom: 4px;
+        left: 0;
+        transition: 0.4s linear;
+      }
+
+      .songButtons i {
+        cursor: pointer;
+      }
+
+      .songInfo {
+        width: 25vw;
+        height: 25px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: rgb(85, 198, 115);
+      }
+
+      .songTime {
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .TimeVol {
+        display: flex;
+        gap: 10px;
+      }
+      .TimeVol i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .TimeVol i::before {
+        font-size: 20px;
+      }
+
+      .range {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* margin-left: 10px; */
+      }
+
+      .range input {
+        cursor: pointer;
+        width: 150px;
+      }
+
+      .upperBar {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin: 0 15px;
+        padding-bottom: 10px;
+        width: 68vw;
+        /* height: 40px; */
+      }
+
+      @media (max-width: 1216px) {
+        .left {
+          background-color: black;
+          position: absolute;
+          transition: all 0.3s;
+          left: -200%;
+          z-index: 4;
+          width: 340px;
+        }
+
+        .left .playNow {
+          margin-right: 15px;
+        }
+        .right {
+          width: 100vw;
+        }
+
+        .bx-menu {
+          display: inline;
+        }
+        .bx-x {
+          display: block;
+        }
+        .header .nav .bx-chevron-right,
+        .header .nav .bx-chevron-left {
+          display: none;
+        }
+        .header .rightLogo {
+          display: block;
+        }
+        .spotifyPlaylist .playbar {
+          width: 90vw;
+          left: 20px;
+        }
+        .right {
+          margin-left: 15px;
+        }
+        .cardContainer {
+          max-height: 75vh;
+        }
+        .library {
+          min-height: 72vh;
+        }
+      }
+      @media (max-width: 786px) {
+        .header .buttons .signup,
+        .support,
+        .premium,
+        .download {
+          display: none;
+        }
+        .header .buttons .signup {
+          border: none;
+        }
+        .header .buttons .login {
+          font-size: 13px;
+          padding: 10px;
+          width: 60px;
+          height: 30px;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .header {
+          background-color: #121212;
+        }
+
+        .upperBar {
+          flex-direction: column;
+          align-items: center;
+        }
+        .disk2 {
+          display: none;
+        }
+        .songInfo {
+          width: 70vw;
+        }
+        .seekbar {
+          top: 94px;
+        }
+        .TimeVol i::before {
+          font-size: 20px;
+          font-weight: 300;
+        }
+        .range input {
+          width: 100px;
+        }
+      }
+
+      @media (max-width: 1702px) {
+        .songList .info p {
+          max-width: 200px;
+        }
+      }
+      @media (max-width: 573px) {
+        .spotifyPlaylist h1 {
+          display: none;
+        }
+        .spotifyPlaylist {
+          background-color: black;
+        }
+        .cardContainer {
+          display: flex;
+          margin: 0;
+          justify-content: center;
+          max-height: 74vh;
+        }
+        .header {
+          width: 100vw;
+          margin: 0;
+        }
+        .right {
+          margin: 0;
+        }
+
+        .play i {
+          opacity: 1;
+          top: 147px;
+          height: 45px;
+          width: 45px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container flex bg-black">
+      <div class="left">
+        <div class="home bg-grey rounded m-1 p-1">
+          <div class="closeLogo">
+            <img
+              width="100px"
+              src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png"
+              alt=""
+            />
+            <i class="bx bx-x"></i>
+          </div>
+          <ul>
+            <li><i class="bx bxs-home"></i>Home</li>
+            <li><i class="bx bx-search"></i>Search</li>
+          </ul>
+        </div>
+        <div class="library bg-grey rounded m-1 p-1">
+          <div class="heading">
+            <ul>
+              <li>
+                <i class="bx bx-library"></i>
+                <p>Your Library</p>
+              </li>
+            </ul>
+          </div>
+          <div class="songList">
+            <ul>
+              <!-- <li>
+                            <i class='bx bxs-music'></i>
+                            <div class="info">
+                                <div>Song Name</div>
+                                <div>Song Artist</div>
+                            </div>
+                            <div class="playNow">
+                                <span>Play Now</span>
+                                <i class='bx bx-play-circle'></i>
+                            </div>
+                        </li> -->
+            </ul>
+          </div>
+          <div class="footer">
+            <div>
+              <a href="https://www.spotify.com/in-en/legal/"
+                ><span>Legal</span></a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/safetyandprivacy/"
+                ><span>Privacy Center</span></a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/legal/privacy-policy/"
+                ><span>Privacy Policy</span></a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/legal/cookies-policy/"
+                ><span>Cookies</span></a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/legal/privacy-policy/#s3"
+                ><span>About</span></a
+              >
+            </div>
+            <div>
+              <a href="https://www.spotify.com/in-en/accessibility/"
+                ><span>Accessibility</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right bg-grey rounded">
+        <div class="header">
+          <div class="nav">
+            <i class="bx bx-menu"></i>
+            <i class="bx bx-chevron-left"></i>
+            <i class="bx bx-chevron-right"></i>
+            <img
+              width="80px"
+              class="rightLogo"
+              src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png"
+              alt=""
+            />
+          </div>
+          <div class="buttons">
+            <a href="#" class="premium text-decoration link-color link-bold"
+              >Premium</a
+            >
+            <a href="#" class="support text-decoration link-color link-bold"
+              >Support</a
+            >
+            <a href="#" class="download text-decoration link-color link-bold"
+              >Download</a
+            >
+            <a href="#" class="signup link-color link-bold">Sign up</a>
+            <button class="login link-bold">Log in</button>
+          </div>
+        </div>
+        <div class="spotifyPlaylist">
+          <h1>Spotify Playlist</h1>
+          <div class="cardContainer">
+            <div class="playbar">
+              <div class="seekbar">
+                <div class="circle"></div>
+              </div>
+              <div class="upperBar">
+                <div id="rotate" class="disk2">
+                  <img width="50px" src="Disk.png" alt="" />
+                </div>
+                <div class="songInfo"></div>
+                <div class="songButtons">
+                  <i id="prev" class="bx bx-skip-previous"></i>
+                  <i id="play" class="bx bx-play-circle"></i>
+                  <i id="next" class="bx bx-skip-next"></i>
+                </div>
+                <div class="TimeVol">
+                  <div class="songTime"></div>
+                  <i id="vol" class="bx bxs-volume-full"> </i>
+                  <div class="range">
+                    <input type="range" name="volume" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+        console.log("let's write javascript");
+
+let songs;
+let songIndex = 0
+// let foldersIndex = 0
+let folders =[];
+let CurrFolder;
+
+function secondsToMinutesSeconds(seconds) {
+
+  if (isNaN(seconds) || seconds <0){
+    return '00:00'
+  }
+  var minutes = Math.floor(seconds / 60);
+  var remainingSeconds = seconds % 60;
+  
+  // Format minutes and seconds with leading zeros if necessary
+  var formattedMinutes = String(minutes).padStart(2, '0');
+  var formattedSeconds = String(remainingSeconds).padStart(2, '0');
+  
+  return formattedMinutes + ':' + formattedSeconds;
+}
+
+
+const getSongs = async (folder) => {
+  CurrFolder = folder;
+  let a = await fetch(`./${folder}/`);
+  let response = await a.text();
+  let div = document.createElement("div");
+  div.innerHTML = response;
+  let as = div.getElementsByTagName("a");
+
+  let songs = [];
+  for (let index = 0; index < as.length; index++) {
+    const element = as[index];
+    if (element.href.endsWith(".mp3")) {
+      songs.push(element.href);
+    }
+  }
+  return songs;
+};
+
+var audio = new Audio();
+const playMusic = (track,pause=false)=>{
+  audio.src= `/${CurrFolder}/` + track
+  if(!pause){
+    audio.play();
+    play.classList.remove("bx-play-circle")
+    play.classList.add("bx-pause-circle")
+  }
+  
+  document.querySelector('.songInfo').innerHTML = `<marquee>${decodeURI(track)}</marquee>`
+  document.querySelector('.songTime').innerHTML ='00:00/00:00'
+}
+
+async function main(foldersIndex) {
+  // Get the list of all the song
+  
+
+  songs = await getSongs(`songs/${foldersIndex}/`);
+
+
+  // show all the song in the playList
+  let songUL = document.querySelector('.songList').getElementsByTagName("ul")[0]
+  songUL.innerHTML = '';
+  for (const song of songs) {
+    songUL.innerHTML = songUL.innerHTML + `<li>
+    <i class='bx bxs-music'></i>
+    <div class="info">
+        <div><p>${(song.split(CurrFolder)[1])}</p></div>
+        <div>Unknown</div>
+    </div>
+    <div class="playNow">
+        <i class='bx bx-play-circle'></i>
+    </div>
+</li>`
+  }
+  playMusic(`${document.querySelector('.songList').getElementsByTagName("li")[0].children[1].children[0].firstChild.innerHTML}`,true)
+// Attach EventListener to each song 
+Array.from(document.querySelector('.songList').getElementsByTagName("li")).forEach((element,index) => {
+  element.addEventListener('click',(e)=>{
+    songIndex = index;
+    playMusic(`${element.children[1].children[0].firstChild.innerHTML}`)
+  })
+});
+
+
+
+// Listen for time update event
+audio.addEventListener("timeupdate",()=>{
+  document.querySelector('.songTime').innerHTML = `${secondsToMinutesSeconds(audio.currentTime.toFixed(0))}/${secondsToMinutesSeconds(audio.duration.toFixed(0))}`
+
+  // if song end then next song play 
+  if(secondsToMinutesSeconds(audio.currentTime.toFixed(0)) == secondsToMinutesSeconds(audio.duration.toFixed(0)) && secondsToMinutesSeconds(audio.currentTime.toFixed(0)) != '00:00'){
+    if(songIndex+1 == songs.length){
+      songIndex = 0
+      playMusic(songs[songIndex].split(CurrFolder)[1])
+      songIndex = songIndex+1
+    }
+    else{
+      playMusic(songs[songIndex+1].split(CurrFolder)[1])
+      songIndex = songIndex+1
+    }
+  }
+
+  
+  document.querySelector('.circle').style.left = (audio.currentTime/audio.duration)*100-1 + '%'
+})
+
+// Add event listner to the seekbar
+document.querySelector('.seekbar').addEventListener('click',(e)=>{
+  let precent =  (e.offsetX/e.target.getBoundingClientRect().width)*100
+  document.querySelector('.circle').style.left = precent + '%'
+  audio.currentTime = (audio.duration*precent)/100
+})
+
+// addEventListener to menubar
+document.querySelector('.bx-menu').addEventListener('click',()=>{
+    document.querySelector('.left').style.left = '0%'
+})
+
+document.querySelector('.bx-x').addEventListener('click',()=>{
+  document.querySelector('.left').style.left = '-200%'
+})
+
+
+// addEventListener to volume 
+document.querySelector('.range').getElementsByTagName('input')[0].addEventListener("change",(e)=>{
+  audio.volume = parseInt(e.target.value)/100
+  if (parseInt(e.target.value)/100 == 0){
+    (document.querySelector('.TimeVol').children[1].classList.remove('bxs-volume-full',))
+    (document.querySelector('.TimeVol').children[1].classList.add('bxs-volume-mute'))
+  }
+  else{
+    (document.querySelector('.TimeVol').children[1].classList.remove('bxs-volume-mute'))
+    (document.querySelector('.TimeVol').children[1].classList.add('bxs-volume-full'))
+  }
+})
+}
+
+async function allFolder(){
+  let a = await fetch(`./songs/`);
+  let response = await a.text();
+  let div = document.createElement("div");
+  div.innerHTML = response;
+  let as = div.getElementsByTagName("a");
+
+  for (let index = 3; index < as.length; index++) {
+    const element = as[index];
+    if (element.href.endsWith(`${element.title}`)) {
+      folders.push(element.title);
+    }
+  }
+return folders
+}
+  
+let main2 =async()=>{
+    folders = await allFolder();
+
+    // get the mataData of the Folder 
+    let arr = []
+    // temp = 0;
+    for (let i = 0; i < folders.length; i++) { 
+      let a = await fetch(`./songs/${folders[i]}/info.json`);
+      let response = await a.json();
+      arr.push(response)
+    }
+    
+    for (let i = 0; i < folders.length; i++) { 
+      // hartik = `${folders[i]}`
+      document.querySelector('.cardContainer').innerHTML =  document.querySelector('.cardContainer').innerHTML + `<div class="card">
+      <div class="play">
+        <i class="bx bx-play flex justify-center items-center"></i>
+      </div>
+      <img
+        src="./songs/${folders[i]}/cover.jpg"
+        alt=""
+      />
+      <h2>${folders[i]}</h2>
+      <p>${arr[i].discription}</p>
+    </div>`
+  }
+
+// addEventListener to card for folder 
+  Array.from(document.getElementsByClassName('bx-play')).forEach((e,index)=>{
+    e.addEventListener('click',async()=>{
+      await  main(folders[index])
+      document.querySelector('.circle').style.left = '0%'
+      document.querySelector(".heading").querySelector("li").children[1].innerHTML = folders[index]
+      audio.pause()
+      setTimeout(() => {
+        playMusic(songs[0].split(CurrFolder)[1])
+      }, 1000);
+      play.classList.remove("bx-pause-circle")
+      play.classList.add("bx-play-circle")
+      songIndex = 0
+    })
+  })
+  
+  
+  // addEventListener to prev or next 
+  prev.addEventListener('click',()=>{
+  if(songIndex == 0){
+    songIndex = songs.length
+    audio.src = songs[songIndex-1];
+    playMusic(audio.src.split(CurrFolder)[1])
+    songIndex = songIndex-1;
+  }
+  else{
+    audio.src = songs[songIndex-1];
+    playMusic(audio.src.split(CurrFolder)[1])
+    songIndex = songIndex-1;
+  }
+})
+next.addEventListener('click',()=>{
+  if (songIndex+1 == songs.length){
+    songIndex = 0
+    audio.src = songs[songIndex];
+    playMusic(audio.src.split(CurrFolder)[1])
+    songIndex = songIndex+1;
+  }
+  else{
+    audio.src = songs[songIndex+1];
+    playMusic(audio.src.split(CurrFolder)[1])
+    songIndex = songIndex+1;
+  }
+})
+
+play = document.querySelector('#play')
+play.addEventListener('click',()=>{
+  if(play.classList[1] == "bx-pause-circle"){
+    document.querySelector("#rotate").classList.remove("disk1");  
+  }
+  else{ 
+    document.querySelector("#rotate").classList.add("disk1");  
+  }
+  if(audio.paused){
+    audio.play()
+    play.classList.remove("bx-play-circle")
+    play.classList.add("bx-pause-circle")
+  }
+  else{
+    audio.pause()
+    play.classList.remove("bx-pause-circle")
+  play.classList.add("bx-play-circle") 
+  
+}
+})
+
+
+
+document.querySelector('.range').getElementsByTagName('input')[0].value = 10
+audio.volume = 0.1
+// addEventListener to mute the song 
+vol.addEventListener('click',(e)=>{
+  if(document.querySelector("#vol").classList.contains("bxs-volume-full")){
+    document.querySelector("#vol").classList.remove("bxs-volume-full")
+    document.querySelector("#vol").classList.add("bxs-volume-mute")
+    document.querySelector('.range').getElementsByTagName('input')[0].value = 0
+    audio.volume = 0
+  }
+  else{
+    document.querySelector("#vol").classList.add("bxs-volume-full")
+    document.querySelector("#vol").classList.remove("bxs-volume-mute")
+    document.querySelector('.range').getElementsByTagName('input')[0].value = 10
+    audio.volume = 0.1
+  }
+})
+
+}
+main2()
+
+if(audio.play()){
+  document.querySelector("#rotate").classList.remove("disk1");  
+}
+else{ 
+  document.querySelector("#rotate").classList.add("disk1");  
+}
+
+if(play.classList[1] == "bx-play-circle"){
+  document.querySelector("#rotate").classList.remove("disk1");  
+}
+else{ 
+  document.querySelector("#rotate").classList.add("disk1");  
+}
+    </script>
+  </body>
+</html>
