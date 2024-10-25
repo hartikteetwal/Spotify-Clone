@@ -783,7 +783,7 @@ function secondsToMinutesSeconds(seconds) {
 
 const getSongs = async (folder) => {
   CurrFolder = folder;
-  let a = await fetch(`./${folder}/`);
+  let a = await fetch(`${folder}/`);
   let response = await a.text();
   let div = document.createElement("div");
   div.innerHTML = response;
@@ -801,7 +801,7 @@ const getSongs = async (folder) => {
 
 var audio = new Audio();
 const playMusic = (track,pause=false)=>{
-  audio.src= `./${CurrFolder}/` + track
+  audio.src= `${CurrFolder}/` + track
   if(!pause){
     audio.play();
     play.classList.remove("bx-play-circle")
@@ -816,7 +816,7 @@ async function main(foldersIndex) {
   // Get the list of all the song
   
 
-  songs = await getSongs(`spotify-clone/songs/${foldersIndex}/`);
+  songs = await getSongs(`songs/${foldersIndex}/`);
 
 
   // show all the song in the playList
@@ -898,7 +898,7 @@ document.querySelector('.range').getElementsByTagName('input')[0].addEventListen
 }
 
 async function allFolder(){
-  let a = await fetch(`./spotify-clone/songs/`);
+  let a = await fetch(`songs/`);
   let response = await a.text();
   let div = document.createElement("div");
   div.innerHTML = response;
@@ -920,7 +920,7 @@ let main2 =async()=>{
     let arr = []
     // temp = 0;
     for (let i = 0; i < folders.length; i++) { 
-      let a = await fetch(`./spotify-clone/songs/${folders[i]}/info.json`);
+      let a = await fetch(`songs/${folders[i]}/info.json`);
       let response = await a.json();
       arr.push(response)
     }
@@ -932,7 +932,7 @@ let main2 =async()=>{
         <i class="bx bx-play flex justify-center items-center"></i>
       </div>
       <img
-        src="./spotify-clone/songs/${folders[i]}/cover.jpg"
+        src="songs/${folders[i]}/cover.jpg"
         alt=""
       />
       <h2>${folders[i]}</h2>
