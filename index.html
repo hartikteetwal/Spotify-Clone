@@ -801,7 +801,7 @@ const getSongs = async (folder) => {
 
 var audio = new Audio();
 const playMusic = (track,pause=false)=>{
-  audio.src= `/${CurrFolder}/` + track
+  audio.src= `./${CurrFolder}/` + track
   if(!pause){
     audio.play();
     play.classList.remove("bx-play-circle")
